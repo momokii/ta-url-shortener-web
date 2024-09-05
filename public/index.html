@@ -1,0 +1,3084 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Perbandingan Performa Golang Gin & Node.js Express</title>
+    <meta name="description" content="Knight is a beautiful Bootstrap 4 template for product landing pages."/>
+
+    <!--Inter UI font-->
+    <link href="https://rsms.me/inter/inter-ui.css" rel="stylesheet">
+
+    <!--vendors styles-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+    <!-- Prism.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.css" >
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Bootstrap CSS / Color Scheme -->
+    <link rel="stylesheet" href="./public/css/blue_light_mode_full.css" id="theme-color">
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+
+</head>
+<body>
+
+<!--navigation-->
+<section class="smart-scroll bg-white">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-md navbar-light">
+            <a class="navbar-brand heading-black" href="#">
+                Perbandingan Performa <br> Golang Gin & Node.js Express  <br> Postgresql & MongoDB
+            </a>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link page-scroll" href="#pendahuluan">Pendahuluan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link page-scroll" href="#api">API</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link page-scroll" href="#pengujian">Pengujian</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link page-scroll" href="#analisis">Analisis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link page-scroll" href="#hasil">Hasil</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</section>
+
+<!--hero header-->
+<section class="py-7 py-md-0 bg-hero" id="home">
+    <div class="container">
+        <div class="row vh-md-100">
+            <div class="col-md-8 col-sm-10 col-12 mx-auto my-auto text-center">
+                <h1 class="heading-black text-capitalize">Melakukan pengujian performa API menggunakan K6</h1>
+                <p class="lead py-3 text-dark">Pengujian performa API untuk membandingkan antara Golang Gin dengan Node.js Express dengan Database Postgresql dan MongoDB</p>
+                <button class="btn btn-primary d-inline-flex flex-row align-items-center">
+                    <a href="#pendahuluan" class="text-white" >Pendahuluan</a>
+                    <em class="ml-2" data-feather="arrow-right"></em>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="md">
+    <div class="container">
+        <div id="carouselExampleControls1" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <a href="https://gin-gonic.com/docs" target="_blank">
+                        <img class="d-block w-100" src="./public/img/go-gin.png" alt="First slide">
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a href="https://expressjs.com/" target="_blank">
+                        <img class="d-block w-100" src="./public/img/node-express.png" alt="First slide">
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a href="https://www.postgresql.org/docs/" target="_blank">
+                        <img class="d-block w-100" src="./public/img/postgre.png" alt="First slide">
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a href="https://www.mongodb.com/docs/" target="_blank">
+                        <img class="d-block w-100" src="./public/img/mongo.jpg" alt="First slide">
+                    </a>
+                </div>
+                <div class="carousel-item">
+                    <a href="https://k6.io/docs" target="_blank">
+                        <img class="d-block w-100" src="./public/img/k6.png" alt="First slide">
+                    </a>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls1" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls1" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- PENDAHULUAN -->
+<section class="pt-6 pb-7" id="pendahuluan">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 mx-auto text-center">
+                <h2 class="heading-black text-dark">Pendahuluan</h2>
+                <p class="text-muted lead text-justify text-dark">Berdasarkan survei stackoverflow 2023 Javascript masih menjadi bahasa pemrograman paling populer. Kita dapat menjalankan Javascript pada sisi server dengan runtime paling populer yang tersedia yaitu Node.js. Golang merupakan bahasa yang sedang naik daun dan juga masuk ke dalam top 10 hasil survei dengan Gin merupakan framework yang paling Populer.
+                <br>
+                Database paling populer berdasarkan hasil survei stackoverflow 2023 adalah Postgresql untuk database SQL dan MongoDB untuk NoSQL.
+                <br>
+                Berdasarkan hal tersebut, saya ingin melakukan pengujian performa API untuk membandingkan antara Golang Gin dengan Node.js Express dengan Database Postgresql dan MongoDB untuk mencari tahu mana yang lebih baik dalam hal performa yang diberikan.
+                </p>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-10 mx-auto">
+                <div class="row feature-boxes">
+                    <div class="col-md-6 box">
+                        <div class="icon-box box-primary">
+                            <div class="icon-box-inner">
+                                <span data-feather="edit-3" width="35" height="35"></span>
+                            </div>
+                        </div>
+                        <h5>Skenario Sistem</h5>
+                        <p class="text-dark text-justify">Total sistem API akan dibuat menjadi dua sistem dengan setiap sistem API akan dikoneksikan ke dua database  (Postgresql & MongoDB) yang sama untuk setiap sistem dengan fitur yang identik antar sistem</p>
+                    </div>
+                    <div class="col-md-6 box">
+                        <div class="icon-box box-success">
+                            <div class="icon-box-inner">
+                                <span data-feather="monitor" width="35" height="35"></span>
+                            </div>
+                        </div>
+                        <h5>Bahan Uji</h5>
+                        <p class="text-dark text-justify">Bahan uji yang akan dikembangkan adalah sebuah API yang digunakan untuk sebuah sistem URL Shortener</p>
+                    </div>
+                    <div class="col-md-6 box">
+                        <div class="icon-box box-danger">
+                            <div class="icon-box-inner">
+                                <span data-feather="layout" width="35" height="35"></span>
+                            </div>
+                        </div>
+                        <h5>Alat Pengujian</h5>
+                        <p class="text-dark text-justify">Alat pengujian menggunakan K6, sebuah alat uji performa open source dengan skenario pengujian dapat ditulis pada kode javacript</p>
+                    </div>
+                    <div class="col-md-6 box">
+                        <div class="icon-box box-info">
+                            <div class="icon-box-inner">
+                                <span data-feather="globe" width="35" height="35"></span>
+                            </div>
+                        </div>
+                        <h5>Jenis Pengujian</h5>
+                        <p class="text-dark text-justify">Jenis pengujian yang digunakan akan terdiri dari Smoke Testing, Breakpointt Testing, Load Testing, dan Spike Testing</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- API -->
+<section class="pt-1 pb-7" id="api">
+    <div class="container">
+        <div class="row mt-6">
+            <div class="col-md-10 mx-auto text-center">
+                <h2 class="heading-black">Pengembangan API</h2>
+            </div>
+
+            <div class="col-md-6 mr-auto">
+                <h3>Pengembangan Bahan Uji API (Application Programming Interfaces)</h3>
+                <p class="mb-5 text-justify text-dark">
+                    API bahan uji yang akan dikembangkan merupakan sebuah API diperuntukkan untuk Internal URL Shortener yang dengan total memiliki tiga jenis pengguna dengan total untuk bahan uji ini terdiri dari 16 endpoint yang akan dikembangkan.
+                    <br> <br>
+                    Semua API yang dikembangkan akan dideploy pada Google Cloud Platform menggunakan servis Cloud Run dengan Konfigurasi yang identik antara Golang Gin dan Node.js Express sehingga dapat membandingkan performa antara kedua bahasa pemrograman tersebut.
+                    <br> <br>
+                    APi dikembangkan akan menggunakan autentikas dengan menggunakan JWT (JSON Web Token) dengan skema autentikasi yang sama antara kedua API yang dikembangkan. Kedua database akan menggunakan skema ERD yang sama diaplikasikan ke dalam database Postgresql dan MongoDB.
+                    <br> <br>
+                    Terkait hasil pengembangan API yang dibuat, source code dapat diakses pada repository Github yang sudah disediakan.
+                    
+                </p>
+
+                <a href="https://github.com/momokii/ta-url-shortener-go" target="_blank" class="btn btn-success">
+                    Golang | Gin
+                </a>
+
+                <a href="https://github.com/momokii/ta-url-shortener-node" target="_blank"  class="btn btn-success">
+                    Node.js | Express
+                </a>
+
+                <hr>
+
+                <button type="button" class="btn btn-info mt-2" data-toggle="modal" data-target="#hakAksesUserModal">
+                    Hak Akses User API
+                </button>
+                <!-- Moda HAK AKSES USERl -->
+                <div class="modal fade text-dark" id="hakAksesUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header text-black">
+                            <h5 class="modal-title text-dark" id="exampleModalLabel">Hak Akses User API</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="list-group text-dark">
+                                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                    <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1 text-dark">Admin</h5>
+                                    </div>
+                                    <p class="mb-1 text-black">Pengguna dengan hak akses paling banyak dan salah satu fitur utama dapat membuat serta menghapus data akun lain dan juga dapat melihat keseluruhan data terkait data user serta data shortlink yang sudah dibuat</p>
+                                </a> <br>
+                                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                    <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1 text-dark">User</h5>
+                                    </div>
+                                    <p class="mb-1">Pengguna yang sudah memiliki akun yang dibuat oleh admin dan dapat login untuk mendapatkan token untuk akses fitur tertentu seperti mengakses data short link yang pernah dibuat dan membuat shortlink baru</p>
+                                </a> <br>
+                                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                    <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1 text-dark">Pengguna umum</h5>
+                                    </div>
+                                    <p class="mb-1">Pengguna yang tidak memiliki akun dan dapat mengakses fitur yang dapat digunakan tanpa proses autentikasi</p>
+                                </a>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button type="button" class="btn btn-info mt-2" data-toggle="modal" data-target="#detailEndpointModal">
+                    Detail Endpoint 
+                </button>
+                <!-- Modal DETAIL ENDPOINT -->
+                <div class="modal fade text-dark" id="detailEndpointModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header text-black">
+                            <h5 class="modal-title text-dark" id="exampleModalLabel">Detail Endpoint</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-sm table-bordered">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Tipe Permintaan</th>
+                                        <th scope="col">Endpoint</th>
+                                        <th scope="col">Deskripsi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>GET</td>
+                                        <td>/{short-link}</td>
+                                        <td>Merupakan fitur utama yang digunakan untuk mendapatkan link asli berdasarkan input parameter short link</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>POST</td>
+                                        <td>/auth/login</td>
+                                        <td>Fitur login untuk user mendapatkan token autentikasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>GET</td>
+                                        <td>/users</td>
+                                        <td>Mendapatkan data banyak users</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>POST</td>
+                                        <td>/users</td>
+                                        <td>Membuat data user baru</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>PATCH</td>
+                                        <td>/users/self</td>
+                                        <td>Mengupdate data pribadi milik user</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>GET</td>
+                                        <td>/users/self</td>
+                                        <td>Mendapatkan data pribadi user milik pribadi</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td>GET</td>
+                                        <td>/users/{username}</td>
+                                        <td>Mendapatkan data pribadi user lain dengan berdasarkan username user tersebut</td>
+                                    </tr>
+                                    <tr>
+                                        <td>8</td>
+                                        <td>PATCH</td>
+                                        <td>/users/status</td>
+                                        <td>Mengubah status keaktifan user lain</td>
+                                    </tr>
+                                    <tr>
+                                        <td>9</td>
+                                        <td>PATCH</td>
+                                        <td>/users/password</td>
+                                        <td>Mengubah password pribadi user</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10</td>
+                                        <td>DELETE</td>
+                                        <td>/users/{id}</td>
+                                        <td>Menghapus data user lain</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11</td>
+                                        <td>GET</td>
+                                        <td>/links</td>
+                                        <td>Mendapatkan data banyak short link</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12</td>
+                                        <td>POST</td>
+                                        <td>/links</td>
+                                        <td>Membuat data short link baru</td>
+                                    </tr>
+                                    <tr>
+                                        <td>13</td>
+                                        <td>PATCH</td>
+                                        <td>/links</td>
+                                        <td>Mengedit data short link pribadi</td>
+                                    </tr>
+                                    <tr>
+                                        <td>14</td>
+                                        <td>DELETE</td>
+                                        <td>/links</td>
+                                        <td>Menghapus data short link</td>
+                                    </tr>
+                                    <tr>
+                                        <td>15</td>
+                                        <td>GET</td>
+                                        <td>/links/self</td>
+                                        <td>Mendapatkan data short link yang pernah dibuat</td>
+                                    </tr>
+                                    <tr>
+                                        <td>16</td>
+                                        <td>GET</td>
+                                        <td>/links/{id}</td>
+                                        <td>Mendapatkan satu data short link berdasarkan id short link</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br> 
+
+                <button type="button" class="btn btn-info mt-2" data-toggle="modal" data-target="#detailERD">
+                    Desain ERD API
+                </button>
+                <!-- Modal DETAIL ERD -->
+                <div class="modal fade text-dark" id="detailERD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header text-black">
+                            <h5 class="modal-title text-dark" id="exampleModalLabel">Detail ERD</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <img class="d-block w-100" src="./public/img/erd.png" alt="ERD">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button type="button" class="btn btn-info mt-2" data-toggle="modal" data-target="#detailAuth">
+                    Desain Autentikasi API
+                </button>
+                <!-- Moda AUTH PROSES -->
+                <div class="modal fade text-dark" id="detailAuth" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header text-black">
+                            <h5 class="modal-title text-dark" id="exampleModalLabel">Detail Autentikasi API</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <img class="d-block w-100 img-fluid max-width:50%" src="./public/img/auth-api.png" alt="ERD">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <br>
+
+            <div class="col-md-5">
+                <div id="carouselExampleControls2" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <a href="https://github.com/momokii/ta-url-shortener-go" target="_blank">
+                                <img class="d-block w-100" src="./public/img/go-gin.png" alt="Github Golang Gin">
+                            </a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="https://github.com/momokii/ta-url-shortener-node" target="_blank">
+                                <img class="d-block w-100" src="./public/img/node-express.png" alt="Github Node.js Express">
+                            </a>
+                        </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls2" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls2" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-6">
+            <div class="col-md-6 mx-auto text-center">
+                <h3>Dokumentasi API</h3>
+                <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailDocAPI">
+                    Dokumentasi API Swagger
+                </button>
+                <!-- Modal DETAIL ERD -->
+                <div class="modal fade text-dark" id="detailDocAPI" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="max-width: 80%;" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header text-black">
+                            <h5 class="modal-title text-dark" id="exampleModalLabel">Dokumentasi API Swagger</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body text-justify">
+                            <div id="swagger-ui"></div>
+                                <!-- <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe src="./public/testhtml.html" class="w-100"></iframe>
+                                </div> -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-success mt-1">
+                    <a href="https://www.postman.com/telecoms-geologist-20807037/workspace/ta/collection/23771223-b8c5536e-8a3b-43ab-8729-952d85d823c0?action=share&creator=23771223" target="_blank" class="text-white">Dokumentasi API Postman</a>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!--pricing section-->
+<section class="py-7 bg-dark section-angle top-right bottom-right" id="pengujian">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto text-center">
+                <h2 class="heading-black">Pengujian Performa API</h2>
+                <p class="text-light lead text-justify text-muted">Pengujian menggunakan tools K6, sebuah tools Open Source yang digunakan untuk pengujian performa, ditulis dalam bahasa Golang serta penulisan skrip pengujian ditulis dalam Javascript. <a href="https://k6.io/docs/" target="_blank">K6 Docs</a>.</p>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-5 mr-auto">
+                <h3>Skenario Pengujian</h3>
+                <p class="lead text-justify text-muted">
+                    Setiap skenario pengujian yang akan dilakukan akan menggunakan skenario yang sama antara Golang Gin dan Node.js Express dengan database Postgresql dan MongoDB. Skenario pengujian yang akan dilakukan akan terdiri dari 4 jenis pengujian yang akan dilakukan.
+                </p>
+            </div>
+            <div class="col-md-6 offset-md-1">
+                <ul class="features-list text-dark">
+                    <li>Smoke Testing</li>
+                    <li>Breakpoint Testing</li>
+                    <li>Load Testing</li>
+                    <li>Spike Testing</li>
+                </ul>
+            </div>
+        </div>
+        <!--pricing tables-->
+        <div class="row pt-5 pricing-table">
+            <div class="col-12 mx-auto text-dark">
+                <div class="card-deck pricing-table">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title pt-3">
+                                <a href="https://grafana.com/blog/2024/01/30/smoke-testing/" target="_blank">Smoke Testing</a>
+                            </h3>
+                            <br>
+                            <p class="text-justify">
+                                Pengujian sebelum melakukan pengujian lainnya untuk memastikan skenario pengujian berjalan sesuai harapan
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title pt-3">
+                                <a href="https://grafana.com/blog/2024/01/30/breakpoint-testing/" target="_blank">Breakpoint Testing</a>
+                            </h3>
+                            <br>
+                            <p class="text-justify">
+                                Pengujian bertujuan mencari ambang batas rps (request per second) sistem yang akan digunakan sebagai dasar pengujian load dan spike testing
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="card-deck pricing-table">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title pt-3">
+                                <a href="https://grafana.com/blog/2024/01/30/average-load-testing/" target="_blank">Load Testing</a>
+                            </h3>
+                            <br>
+                            <p class="text-justify">
+                                Pengujian untuk melihat bagaimana sistem menahan normal dengan juga melihat bagaimana utilisasi cpu dan memory yang digunakan sistem
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title pt-3">
+                                <a href="https://grafana.com/blog/2024/01/30/spike-testing/" target="_blank">Spike Testing</a>
+                            </h2>
+                                <br>
+                                <p class="text-justify">
+                                    Pengujian untuk melihat bagaimana sistem menahan beban yang meningkat dengan cepat sampai di atas rataan beban normal sistem dan kemudian beban turun dengan cepat. Melihat hasil utilisasi cpu dan memori sistem terhadap skenario yang diberikan
+                                </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-8 col-12 divider top-divider mx-auto pt-5 text-center text-dark">
+                <h3>Jenis Pengujian</h2>
+                <p class="mb-4">Setiap pengujian akan memiliki karakteristik serta waktu lama pengujian yang berbeda - beda sesuai dengan tujuan dari masing - masing pengujian.</p>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detailJenisPengujian">
+                    Detail Jenis Pengujian
+                </button>
+                <!-- Modal DETAIL JENIS PENGUJIAN -->
+                <div class="modal fade text-dark" id="detailJenisPengujian" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header text-black">
+                            <h5 class="modal-title text-dark" id="exampleModalLabel">Detail Jenis Pengujian</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                                <table class="table table-sm table-bordered mb-4">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Pengujian</th>
+                                            <th>Waktu</th>
+                                            <th>Data</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-justify">
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Smoke</td>
+                                            <td>5 detik</td>
+                                            <td>
+                                                <ul>
+                                                    <li>5 virtual users</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Breakpoint</td>
+                                            <td>60 menit (maksimal)</td>
+                                            <td>
+                                                <ul>
+                                                    <li>Target maksimal 10000 rps (Iteration per second)</li>
+                                                    <li>Angka batas sistem gagal ketika total permintaan gagal mencapai 10% dari semua permintaan yang dilakukan</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Load</td>
+                                            <td>40 menit
+                                                <ul>
+                                                    <li>5 menit menaikkan beban ke target</li>
+                                                    <li>30 menit menahan beban</li>
+                                                    <li>5 menit menurunkan beban kembali ke 0</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>Target beban yang akan ditahan didapatkan berdasarkan hasil pengujian <em>breakpoint</em> dengan menggunakan n nilai rps yang didapatkan</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Spike</td>
+                                            <td>7 menit
+                                                <ul>
+                                                    <li>1 menit menaikkan beban ke target</li>
+                                                    <li>5 menit menahan beban</li>
+                                                    <li>1 menit menurunkan beban kembali ke 0</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <ul>
+                                                    <li>Target beban yang akan ditahan didapatkan berdasarkan hasil pengujian <em>breakpoint</em> dengan menggunakan n nilai rps yang didapatkan dengan menaikkan nilai beban sebanyak 100% untuk gambaran lonjakan beban yang ada</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-6">
+            <div class="col-md-6 mx-auto text-center">
+                <h3>Skenario Pengujian</h3>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detailSkenarioPengujian">
+                    Detail Skenario Pengujian
+                </button>
+                <!-- Modal DETAIL SKENARIO PENGUJIAN -->
+                <div class="modal fade text-dark" id="detailSkenarioPengujian" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header text-black">
+                            <h5 class="modal-title text-dark" id="exampleModalLabel">Detail Skenario Pengujian</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                                <table class="table table-sm table-bordered mb-4">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Endpoint diuji</th>
+                                            <th>Deskripsi</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="text-justify">
+                                        <tr>
+                                            <td>1</td>
+                                            <td>POST /login</td>
+                                            <td>Melakukan pengujian untuk login dan mendapatkan token autentikasi</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>GET /{short-link}</td>
+                                            <td>Melakukan pengujian untuk fitur utama short link dan mendapatkan data link asli</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>GET /links</td>
+                                            <td>Melakukan pengujian mendapatkan banyak data short link sekaligus</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>POST /links</td>
+                                            <td>Melakukan pengujian membuat data short link baru</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>PATCH /links</td>
+                                            <td>Melakukan pengujian mengubah data short link yang sudah ada</td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>GET /links/self</td>
+                                            <td>Melakukan pengujian mendapatkan banyak data short link milik pribadi yang telah dibuat</td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>DELETE /links</td>
+                                            <td>Melakukan pengujian menghapus data short link</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>E2E (End to End)<br>Mencangkup:<br>- POST /login<br>- GET /links/self<br>- POST /links<br>- GET /{short-link}<br>- PATCH /links<br>- GET /{short-link} <br>- DELETE /links</td>
+                                            <td>Melakukan pengujian e2e (end to end) untuk menggambarkan alur yang umum digunakan oleh pengguna</td>
+                                        </tr>
+                                        <tr>
+                                            <td>9</td>
+                                            <td>E2E (End to End)<br>Mencangkup:<br>- GET /links/self<br>- POST /links<br>- GET /{short-link}<br>- PATCH /links<br>- GET /{short-link} <br>- DELETE /links</td>
+                                            <td>Melakukan pengujian e2e (end to end) untuk menggambarkan alur yang umum digunakan oleh pengguna</td>
+                                        </tr>
+                                        </tbody>
+                                </table>
+                                
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-10 mx-auto">
+                <div class="row">
+                    <div class="col-md-6 mb-5 text-justify">
+                        <h6>Detail Skenario</h6>
+                        <p class="text-dark">
+                            Total skenario pengujian yang akan diuji akan memiliki total 9 skenario dengan rincian 7 merupakan pengujian endpoint tunggal yang sudah mencangkup untuk semua jenis request dan 2 merupakan pengujian End to End (E2E) yang menggambarkan alur penggunaan endpoint dari mulai login sampai menghapus data short url yang dibuat.
+                            <br>
+                            Kedua pengujian E2E memiliki alur yang sama, perbedaan terdapat pada salah satu E2E tidak menggunakan proses login. Hal tersebut dikarenakan proses login terbilang cukup berat karena ada hashing maka dengan menghilangkan proses login akan dapat menjadi perbandingan dan bahan analisis lebih lanjut dengan skema yang sama dan menghilangkan satu proses yang berat bagaimana hasil dari pengujian yang dihasilkan dari semua skenario pengujian API yang akan dilakukan
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <h6>Total Waktu Pengujian</h6>
+                        <p class="text-dark">Tanpa menghitung proses Breakpoint Testing yang total waktunya akan bersifat tentatif, maka menghitung waktu Load dan Spike testing yang kedua pengujian tersebut memiliki total waktu pengujian 47 menit dikalikan dengan 9 skenario pengujian dan dikalikan kembali dengan 4 total bahan uji maka total waktu pengujian paling sebentar adalah 1.692 menit atau 28 jam</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-5 text-justify">
+                        <h6>Penulisan Skrip Pengujian</h6>
+                        <p class="text-dark">
+                            Skrip pengujian yang dijalankan pada K6 akan ditulis dengan kode dasar javascript. Secara umum skrip yang ditulis akan ada dua jenis struktur umum yaitu untuk pengujian satu endpoint dan untuk E2E dimana pada skrip E2E akan memanggil banyak endpoint sekaligus dalam satu skrip. Terdapat contoh untuk skrip pengujian yang akan dilakukan untuk pengujian satu endpoint dan E2E. Serta juga disediakan juga terkait repositry Github yang berisi skrip keseluruhan skrip pengujian.
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <h6>Skrip Pengujian</h6>
+                        <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#detailSkripEndpoint">
+                            Skrip Pengujian Endpoint Tunggal
+                        </button>
+                        <!-- Modal Skrip Pengujian Endpoint -->
+                        <div class="modal fade text-dark" id="detailSkripEndpoint" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Contoh Skrip Pengujian Endpoint</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">               
+                                    <pre><code class="language-javascript">
+import http from 'k6/http';
+import { check } from 'k6';
+import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
+import { randomString } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
+
+export function handleSummary(data) {
+    console.log('Preparing the end-of-test summary...');
+    return {
+        "stdout": textSummary(data, { indent: ' ', enableColors: true }),
+    };
+}
+
+let SCENARIO, SCENARIO_TYPE, DB_TYPE, BASE_URL 
+let JWT, USER_TYPE, LONG_LINK, CUSTOM_LINK, SERVICE 
+
+
+SCENARIO_TYPE = __ENV.SCENARIO
+DB_TYPE = __ENV.DB_TYPE
+
+BASE_URL = __ENV.SERVICE
+if(BASE_URL === 'golang') BASE_URL = __ENV.ENDPOINT_GOLANG
+else BASE_URL = __ENV.ENDPOINT_NODE
+
+SERVICE =  __ENV.SERVICE
+
+USER_TYPE = __ENV.USER_TYPE
+if(USER_TYPE === 'admin') {
+    if(DB_TYPE === 'mongo') JWT = __ENV.JWT_ADMIN_NOSQL
+    else JWT = __ENV.JWT_ADMIN_SQL
+} else {
+    if(DB_TYPE === 'mongo') JWT = __ENV.JWT_USER_NOSQL
+    else JWT = __ENV.JWT_USER_SQL
+}
+
+LONG_LINK = __ENV.LONG_LINK
+CUSTOM_LINK = __ENV.CUSTOM_LINK === 'true' ? true : false 
+
+let SCENARIOS = {
+    breakpoint: {
+        executor: 'ramping-arrival-rate',
+        startRate: 0,
+        timeUnit: '1s',
+        preAllocatedVUs: 1000, 
+        stages: [
+            { duration: '60m', target: 10000 },
+        ],
+    },
+    load: {
+        executor: 'ramping-arrival-rate',
+        startRate: 0,
+        timeUnit: '1s',
+        preAllocatedVUs: 1000, 
+        maxVUs: 100000, 
+        stages: [
+            { duration: '5m', target: 31 },
+            { duration: '30m', target: 31 },
+            { duration: '5m', target: 0 },
+        ],
+    },
+    spike: {
+        executor: 'ramping-arrival-rate',
+        startRate: 0,
+        timeUnit: '1s',
+        preAllocatedVUs: 2000,
+        maxVUs: 8000,
+        stages: [
+            { duration: '1m', target: 75 }, 
+            { duration: '5m', target: 75 }, 
+            { duration: '1m', target: 0 },  
+        ]
+    },
+    smoke: {
+        executor: 'constant-vus',
+        vus: 5,
+        duration: '5s',
+    }
+}
+
+
+let THRESHOLD = {
+    http_req_failed: [
+        {
+        threshold:'rate<0.05',
+        abortOnFail: true,
+        delayAbortEval: "10s",
+    }]
+}
+
+SCENARIO = {
+    scenarios: {
+        [SCENARIO_TYPE]: SCENARIOS[SCENARIO_TYPE]
+    }
+}
+
+if(SCENARIO_TYPE === 'breakpoint') SCENARIO.thresholds = THRESHOLD
+
+export function setup() {
+    console.log(`Start Create New Short Link Testing with ${SCENARIO_TYPE} test, using service: ${__ENV.SERVICE} base url: ${BASE_URL} db type: ${DB_TYPE} with type user: ${USER_TYPE}`)   
+}
+
+export const options = SCENARIO
+
+export default function () {
+    let endpoint = BASE_URL
+
+    endpoint = `${endpoint}/links?` 
+
+    if(DB_TYPE === 'mongo') endpoint = endpoint + 'db=mongo'
+
+    const options = {
+        headers: {
+            Authorization: `Bearer ${JWT}`
+        }
+    }
+
+    let short_link = __ENV.SHORT_LINK
+    if(CUSTOM_LINK) short_link = randomString(5, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
+
+    let body = {
+        long_url: LONG_LINK,
+        short_url: short_link,
+        custom_link: CUSTOM_LINK
+    }
+
+    if(SERVICE === 'golang') body = JSON.stringify(body)
+
+    const res = http.post(
+        endpoint,
+        body,
+        options
+    )
+    
+    check(res, {
+        'is status 200': (r) => r.status == 200,
+    })
+}
+                                    </code></pre>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <button type="button" class="btn btn-primary mt-2" data-toggle="modal" data-target="#detailSkripE2E">
+                            Skrip Pengujian E2E
+                        </button>
+                        <!-- Modal Skrip Pengujian Endpoint -->
+                        <div class="modal fade text-dark" id="detailSkripE2E" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Contoh Skrip Pengujian E2E</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">               
+                                    <pre>
+                                        <code class="language-javascript">
+import http from 'k6/http';
+import { check, group } from 'k6';
+import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
+import { randomString } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
+
+export function handleSummary(data) {
+    console.log('Preparing the end-of-test summary...');
+    return {
+        "stdout": textSummary(data, { indent: ' ', enableColors: true }),
+    };
+}
+
+let SCENARIO, SCENARIO_TYPE, DB_TYPE, BASE_URL 
+let USER_TYPE, LONG_LINK, CUSTOM_LINK, USERNAME, PASSWORD 
+
+SCENARIO_TYPE = __ENV.SCENARIO
+DB_TYPE = __ENV.DB_TYPE
+
+BASE_URL = __ENV.SERVICE
+if(BASE_URL === 'golang') BASE_URL = __ENV.ENDPOINT_GOLANG
+else BASE_URL = __ENV.ENDPOINT_NODE
+
+PASSWORD = __ENV.PASSWORD
+USER_TYPE = __ENV.USER_TYPE
+if(USER_TYPE === 'admin') USERNAME = __ENV.USERNAME_ADMIN
+else USERNAME = __ENV.USERNAME_USER
+
+LONG_LINK = __ENV.LONG_LINK
+CUSTOM_LINK = __ENV.CUSTOM_LINK === 'true' ? true : false
+
+let SCENARIOS = {
+    breakpoint: {
+        executor: 'ramping-arrival-rate',
+        startRate: 0,
+        timeUnit: '1s',
+        preAllocatedVUs: 1000, 
+        stages: [
+            { duration: '60m', target: 10000 },
+        ],
+    },
+    load: {
+        executor: 'ramping-arrival-rate',
+        startRate: 0,
+        timeUnit: '1s',
+        preAllocatedVUs: 1000, 
+        maxVUs: 100000, 
+        stages: [
+            { duration: '5m', target: 31 },
+            { duration: '30m', target: 31 },
+            { duration: '5m', target: 0 },
+        ],
+    },
+    spike: {
+        executor: 'ramping-arrival-rate',
+        startRate: 0,
+        timeUnit: '1s',
+        preAllocatedVUs: 2000,
+        maxVUs: 8000,
+        stages: [
+            { duration: '1m', target: 75 }, 
+            { duration: '5m', target: 75 }, 
+            { duration: '1m', target: 0 },  
+        ]
+    },
+    smoke: {
+        executor: 'constant-vus',
+        vus: 5,
+        duration: '5s',
+    }
+}
+
+
+let THRESHOLD = {
+    http_req_failed: [
+        {
+        threshold:'rate<0.05',
+        abortOnFail: true,
+        delayAbortEval: "10s",
+    }]
+}
+
+SCENARIO = {
+    scenarios: {
+        [SCENARIO_TYPE]: SCENARIOS[SCENARIO_TYPE]
+    }
+}
+
+if(SCENARIO_TYPE === 'breakpoint') SCENARIO.thresholds = THRESHOLD
+
+export function setup() {
+    console.log(`Start E2E Testing with ${SCENARIO_TYPE} test, using service: ${__ENV.SERVICE} base url: ${BASE_URL} db type: ${DB_TYPE} with type user: ${USER_TYPE}`)   
+
+    const endpoints = {
+        endpoint_login: `${BASE_URL}/auth/login`,
+        endpoint_get_link_self: `${BASE_URL}/links/self`,
+        endpoint_links: `${BASE_URL}/links`
+    };
+    
+    const addDBType = (url) => DB_TYPE === 'mongo' ? `${url}?db=mongo` : url
+    
+    const updatedEndpoints = Object.fromEntries(
+        Object.entries(endpoints).map(([key, value]) => [key, addDBType(value)])
+    );
+    
+    const { endpoint_login, endpoint_get_link_self, endpoint_links } = updatedEndpoints
+
+
+    return {
+        endpoint_login, 
+        endpoint_get_link_self, 
+        endpoint_links
+    }
+}
+
+export const options = SCENARIO
+
+export default function (data) {
+    let { endpoint_login, endpoint_get_link_self, endpoint_links } = data
+    let id_url_created, headers, endpoint_link_main
+
+    const SERVICE = __ENV.SERVICE
+
+    const create_main_get_link = (short_link) => {
+        let url = BASE_URL + '/' + short_link
+        if(DB_TYPE === 'mongo') url = url + '?db=mongo'
+        return url
+    }
+
+    const createHeader = (token) => {
+        return {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    }
+
+    group('1. Login', () => {
+        let body = {
+            username: USERNAME,
+            password: PASSWORD
+        }
+
+        if (SERVICE === 'golang') body = JSON.stringify(body)
+
+        const res = http.post(
+            endpoint_login,
+            body
+        )
+
+        const status = check(res, {
+            'is status 200': (r) => r.status == 200,
+        })
+
+        if(!status) {
+            console.log('Failed to login')
+            return
+        } else headers = createHeader(res.json().data.access_token)
+    })
+
+    group('2. Get Links Self Data', () => {
+        const res = http.get(
+            endpoint_get_link_self,
+            headers
+        )
+
+        const status = check(res, {
+            'is status 200': (r) => r.status == 200,
+        })
+
+        if(!status) {
+            console.log('Failed to get link self data')
+            return
+        }
+    })
+
+    group('3. Create Link', () => {
+        let short_link = __ENV.SHORT_LINK
+        if(CUSTOM_LINK) short_link = randomString(5, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
+
+        let body = {
+            long_url: LONG_LINK,
+            short_url: short_link,
+            custom_link: CUSTOM_LINK
+        }
+
+        if (SERVICE === 'golang') body = JSON.stringify(body)
+
+        const res = http.post(
+            endpoint_links,
+            body,
+            headers
+        )
+        
+        const status = check(res, {
+            'is status 200': (r) => r.status == 200,
+        })
+
+        if(!status) {
+            console.log('Failed to create link')
+            return
+        } else {
+            id_url_created = res.json().data.inserted_id
+            endpoint_link_main = create_main_get_link(res.json().data.short_url)
+        }
+    })
+
+    group('4. Check Created Link 1', () => {
+        const res = http.get(
+            endpoint_link_main
+        )
+
+        const status = check(res, {
+            'is status 200': (r) => r.status == 200,
+        })
+
+        if(!status) {
+            console.log('Failed to Check Link 1')
+            return
+        }
+    })
+
+    group('5. Edit Link Data', () => {
+        let short_link = __ENV.SHORT_LINK
+        if(CUSTOM_LINK) short_link = randomString(5, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
+
+        let body = {
+            url_id: id_url_created,
+            long_url: LONG_LINK,
+            short_url: short_link,
+            custom_link: CUSTOM_LINK
+        }
+
+        if (SERVICE === 'golang') body = JSON.stringify(body)
+
+        const res = http.patch(
+            endpoint_links,
+            body,
+            headers
+        )
+        
+        const status = check(res, {
+            'is status 200': (r) => r.status == 200,
+        })
+
+        if(!status) {
+            console.log('Failed to ')
+            return
+        } else endpoint_link_main = create_main_get_link(res.json().data.short_url)
+    })
+
+    group('6. Check Created Link 2', () => {
+        const res = http.get(
+            endpoint_link_main
+        )
+
+        const status = check(res, {
+            'is status 200': (r) => r.status == 200,
+        })
+
+        if(!status) {
+            console.log('Failed to Check Link 2')
+            return
+        }
+    })
+
+    group('7. Deleted Link', () => {
+        let body = {
+            url_id: id_url_created,
+        }
+
+        if (SERVICE === 'golang') body = JSON.stringify(body)
+
+        const res = http.del(
+            endpoint_links,
+            body,
+            headers
+        )
+        
+        const status = check(res, {
+            'is status 200': (r) => r.status == 200,
+        })
+
+        if(!status) {
+            console.log('Failed to delete link')
+            return
+        }
+    })
+}
+                                        </code>
+                                    </pre>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <a href="https://github.com/momokii/ta-url-shortener-ptest" target="_blank"  class="btn btn-success mt-2">
+                            Perfomance Testing Repository
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-5 text-justify">
+                        <h6>Pengujian</h6>
+                        <p class="text-dark">
+                            Pengujian dijalankan sesuai skenario yang sudah ditulis pada setiap jenis pengujian yang akan dilakukan. Setiap skenario akan secara urut melewati jenis pengujian dari Smoke Testing, Breakpoint Testing, Load Testing, dan Spike Testing. Pengujian akan menghasilkan data yang akan digunakan untuk analisis hasil pengujian seperti iterasi per detik yang didapatkan dari Breakpoint testing, kemudian juga hasil pengujian Load dan Spike testing yang akan digunakan untuk melihat bagaimana sistem menahan beban yang diberikan yang hasil tersebut. 
+                            <br>
+                            Pengujian yang dilakukan pada Command Line juga selain hasilkan output CLI juga menghasilkan satu file HTML berisi hasil pengujian yang dilakukan yang akan digunakan sebagai bahan analisis hasil pengujian yang dilakukan dan untuk utilisasi cpu dan memory yang digunakan sistem didapatkan dari metrik yang disediakan oleh Cloud Run.
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <h6>Hasil Pengujian</h6>
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#exHTML">
+                            Output HTML Hasil Pengujian 
+                        </button>
+                        <!-- Modal EX OUTPUT HTML -->
+                        <div class="modal fade text-dark" id="exHTML" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" style="max-width: 80%;" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Contoh output HTML Hasil Pengujian</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body text-justify">
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            <iframe src="./public/example-html.html" class="w-90"></iframe>
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#exCLI">
+                            Output Command Line
+                        </button>
+                        <!-- Modal EX CLI -->
+                        <div class="modal fade text-dark" id="exCLI" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Contoh Output Command Line</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mt-2">
+                                        <img src="./public/img/ex-cli.png" class="img-fluid w-100" alt="50% Width Image">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#exCPUmem">
+                            Output Utilisasi CPU & Memory Hasil Pengujian 
+                        </button>
+                        <!-- Modal EX Utilisasi CPU Memori -->
+                        <div class="modal fade text-dark" id="exCPUmem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Contoh Output Utilisasi CPU & Memory Hasil Pengujian </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mt-2">
+                                        <p class="text-muted lead">
+                                            Utilisasi CPU
+                                        </p>
+                                        <img src="./public/img/ex-cpu.png" class="img-fluid w-100" alt="50% Width Image">
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <p class="text-muted lead">
+                                            Utilisasi Memori
+                                        </p>
+                                        <img src="./public/img/ex-mem.png" class="img-fluid w-70" alt="50% Width Image">
+                                    </div>
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!--faq section-->
+<section class="py-7" id="analisis">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto text-center">
+                <h2>Analisis</h2>
+                <p class="text-muted lead">Melakukan analisis hasil pengujian yang telah dilakukan pada semua skenario pengujian. Mencari tau terkait bagaimana performa yang didapatkan oleh masih - masing skenario sistem yang telah diuji.</p>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-10 mx-auto">
+                <div class="row">
+                    <div class="col-md-6 mb-5">
+                        <h6>Nilai Pengujian Breakpoint, Load, dan Spike</h6>
+                        <p class="text-muted text-justify">
+                            Dalam tabel yang tersedia merupakan besaran iterasi per detik maksimal yang dibebankan pada Load & Spike Testing masing - masing skenario sistem yang didapatkan berdasarkan Breakpoint Testing yang dilakukan. Semakin tinggi nilai iterasi per detik yang didapatkan maka semakin baik performa sistem yang dihasilkan. Dimana beban pada load testing akan menggunakan nilai berdasar pada breakpoint testing dan juga beban pada spike testing akan berdasar pada dua kali beban pada load testing.
+                        </p>
+                        
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detailNilaiPengujian">
+                            Nilai Hasil Pengujian
+                        </button>
+                        <!-- Modal DETAIL SKENARIO PENGUJIAN -->
+                        <div class="modal fade text-dark" id="detailNilaiPengujian" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Nilai Iterasi per Detik Breakpoint</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Hasil Breakpoint testing akan menjadi dasar untuk digunakan pada Load & Spike testing dengan pembulatan nilai minimum adalah 1 dan pada Spike Testing nilai digunakan adalah dua kali dari nilai pada Load Testing</p>
+                                    
+                                    <table class="table table-sm table-bordered mb-4 table-striped">
+                                            <thead class="text-center">
+                                                <tr>
+                                                <th>Skenario</th>
+                                                <th>Servis / Basis Data</th>
+                                                <th>Breakpoint</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                <td rowspan="4">POST /login</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>6</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>6</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                <td rowspan="4">GET /links</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>34</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>7</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>32</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>26</td>
+                                                </tr>
+                                                <tr>
+                                                <td rowspan="4">GET /{short-link}</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>68</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>47</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>81</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>69</td>
+                                                </tr>
+                                                <tr>
+                                                <td rowspan="4">POST /links</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>61</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>29</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>72</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>29</td>
+                                                </tr>
+                                                <tr>
+                                                <td rowspan="4">PATCH /links</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>15</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>5</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>15</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>7</td>
+                                                </tr>
+                                                <tr>
+                                                <td rowspan="4">GET /links/self</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>18</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>13</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>32</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>20</td>
+                                                </tr>
+                                                <tr>
+                                                <td rowspan="4">DELETE /links</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>47</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>8</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>62</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>7</td>
+                                                </tr>
+                                                <tr>
+                                                <td rowspan="4">E2E (End to End)</td>
+                                                <td>Node.js / PostgreSQL </td>
+                                                <td>0.88</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>0.17</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>0.95</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>0.9</td>
+                                                </tr>
+                                                <tr>
+                                                <td rowspan="4">E2E (End to End) tanpa login</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>21</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>2.7</td>
+                                                </tr>
+                                                <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>15</td>
+                                                <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>1.9</td>
+                                                </tr>
+                                            </tbody>
+                                    </table>
+
+                                    <ul class="text-muted list text-justify">
+                                        <li>
+                                            <strong>Kombinasi Terbaik:</strong> Golang dengan PostgreSQL menunjukkan performa terbaik dalam iterasi per detik saat breakpoint testing, diikuti oleh Golang dengan MongoDB, Node.js dengan PostgreSQL, dan Node.js dengan MongoDB. API dengan Golang umumnya lebih unggul daripada Node.js.
+                                        </li>
+                                        <li>
+                                            <strong>Performa Golang pada Beban Tinggi:</strong> Golang menunjukkan kinerja yang lebih baik saat menerima beban tinggi. Meskipun tidak selalu unggul dalam setiap pengujian dibandingkan dengan Node.js pada basis data yang sama, selisih iterasi per detiknya tidak terlalu besar. Dari 8 skenario pengujian, Golang unggul dalam 5 skenario dan 1 skenario memiliki hasil yang sama dengan Node.js menggunakan PostgreSQL. Dengan MongoDB, Golang unggul dalam 3 skenario dengan selisih yang signifikan.
+                                        </li>
+                                        <li>
+                                            <strong>Keunggulan PostgreSQL:</strong> PostgreSQL consistently menghasilkan performa lebih tinggi dibandingkan MongoDB dalam pengujian breakpoint, dengan nilai akhir yang lebih tinggi di semua skenario.
+                                        </li>
+                                        <li>
+                                            <strong>Rataan Iterasi Rendah pada Login:</strong> Pengujian login memiliki rataan iterasi terendah karena prosesnya yang berat. Hal ini diperkuat oleh data E2E testing, di mana E2E tanpa login menghasilkan iterasi yang jauh lebih banyak dibandingkan dengan E2E menggunakan login, dengan selisih sekitar 25 iterasi per detik.
+                                        </li>
+                                        <li>
+                                            <strong>Kesamaan Nilai pada E2E dengan Login:</strong> Pengujian E2E dengan login untuk load dan spike menggunakan nilai yang sama untuk semua jenis API dan basis data. Hal ini karena sistem K6 hanya memungkinkan pengujian iterasi per detik minimal satu, sementara pada pengujian breakpoint, semua skenario memiliki nilai di bawah satu. Pengujian dengan target yang sama memberikan perbandingan yang valid dalam hal penggunaan CPU dan memori di semua servis dan jenis basis data.
+                                        </li>
+                                    </ul>
+                                    
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailbpsistem">
+                            Breakpoint (IPS) Sistem
+                        </button>
+                        <!-- Modal detail single link  -->
+                        <div class="modal fade text-dark" id="detailbpsistem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Median Nilai IPS Breakpoint Sistem</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><b>IPS (Iteration per second) </b> Jumlah iterasi yang dilakukan saat pengujian dalam setiap detik, dimana memungkinkan dalam satu iterasi terdapat lebih dari 1 request/permintaan yang dilakukan</p>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Servis/ Basis Data</th>
+                                                <th>Load</th>
+                                                <th>Spike</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Node.js / PostgreSQL</td>
+                                                    <td class="nowrap">21</td>
+                                                    <td class="nowrap">42</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Node.js / MongoDB</td>
+                                                    <td class="nowrap">8</td>
+                                                    <td class="nowrap">16</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Golang / PostgreSQL</td>
+                                                    <td class="nowrap">32</td>
+                                                    <td class="nowrap">64</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Golang / MongoDB</td>
+                                                    <td class="nowrap">20</td>
+                                                    <td class="nowrap">40</td>
+                                                </tr>
+                                            </tbody>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="container">
+                                        <canvas id="chartBPSistem"></canvas>
+                                    </div>
+
+                                    <p class="text-muted text-justify mt-1">
+                                        Secara pencapaian yang didapatkan selama pengujian Breakpoint untuk mendapatkan nilai tertinggi yang akan digunakan pada Load & Spike Testing, Golang dengan PostgreSQL menjadi kombinasi yang mendapatkan nilai median tertinggi dari semua pengujian yang dilakukan yang berarti kombinasi tersebut yang dapat memproses data paling baik.
+                                    </p>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailbpfw">
+                            Breakpoint (IPS) Framework
+                        </button>
+                        <!-- Modal detail single link  -->
+                        <div class="modal fade text-dark" id="detailbpfw" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Median Nilai IPS Breakpoint Framework</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><b>IPS (Iteration per second) </b> Jumlah iterasi yang dilakukan saat pengujian dalam setiap detik, dimana memungkinkan dalam satu iterasi terdapat lebih dari 1 request/permintaan yang dilakukan</p>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Servis</th>
+                                                <th>Load</th>
+                                                <th>Spike</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Node.js Express</td>
+                                                <td class="nowrap">14</td>
+                                                <td class="nowrap">28</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang Gin</td>
+                                                <td class="nowrap">15</td>
+                                                <td class="nowrap">30</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="container">
+                                        <canvas id="chartBPFW"></canvas>
+                                    </div>
+
+                                    <p class="text-muted text-justify mt-1">
+                                        Hasil nilai median dari keseluruhan pengujian memberikan Golang Gin unggul secara tipis daripada Node.js Express
+                                    </p>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailutildbbp">
+                            Breakpoint (IPS) Database
+                        </button>
+                        <!-- Modal detail single link  -->
+                        <div class="modal fade text-dark" id="detailutildbbp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Median Nilai IPS Breakpoint Database</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><b>IPS (Iteration per second) </b> Jumlah iterasi yang dilakukan saat pengujian dalam setiap detik, dimana memungkinkan dalam satu iterasi terdapat lebih dari 1 request/permintaan yang dilakukan</p>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Basis Data</th>
+                                                <th>Load</th>
+                                                <th>Spike</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Postgresql</td>
+                                                <td class="nowrap">26.5</td>
+                                                <td class="nowrap">53</td>
+                                            </tr>
+                                            <tr>
+                                                <td>MongoDB</td>
+                                                <td class="nowrap">8</td>
+                                                <td class="nowrap">16</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="container">
+                                        <canvas id="chartBPDB"></canvas>
+                                    </div>
+
+                                    <p class="text-muted text-justify mt-1">
+                                        Berbeda pada hasil berdasarkan framework, ketika dibandingkan berdasarkan Database yang digunakan. Terlihat perbedaan signifikan berdasarkan hasil yang diberikan untuk nilai median dari nilai yang didapatkan pada semua pengujian breakpoint.
+                                    </p>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <h6>Nilai Utilisasi CPU & Memori</h6>
+                        <p class="text-muted text-justify mt-1">
+                            Dalam tabel yang tersedia merupakan nilai median penggunaan CPU dan Memori yang digunakan oleh kombinasi sistem, framework, dan database selama pengujian berlangsung. Semakin kecil nilai yang didapatkan maka semakin baik performa yang dihasilkan karena berarti semakin efisien.
+                        </p>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailutilsistem">
+                            Utilisasi Sistem
+                        </button>
+                        <!-- Modal detail single link  -->
+                        <div class="modal fade text-dark" id="detailutilsistem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Nilai Utilisasi Sistem CPU & Memory</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><b>IPS (Iteration per second) </b> Jumlah iterasi yang dilakukan saat pengujian dalam setiap detik, dimana memungkinkan dalam satu iterasi terdapat lebih dari 1 request/permintaan yang dilakukan</p>
+
+                                    <p>Beban yang digunakan pada Load & Spike Testing didasarkan pada hasil Breakpoint Testing Sebelumnya</p>
+
+                                    <table class="table table-sm table-bordered mb-4 table-striped">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th rowspan="2">Skenario</th>
+                                                <th rowspan="2">Servis / Basis Data</th>
+                                                <th colspan="2">Load</th>
+                                                <th colspan="2">Spike</th>
+                                            </tr>
+                                            <tr>
+                                                <th>CPU (%)</th>
+                                                <th>Memory (%)</th>
+                                                <th>CPU (%)</th>
+                                                <th>Memory (%)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td rowspan="4">POST /login</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>88,55</td>
+                                                <td>25,28</td>
+                                                <td>84,88</td>
+                                                <td>23,87</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>84,5</td>
+                                                <td>21,15</td>
+                                                <td>84,91</td>
+                                                <td>22,94</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>62,57</td>
+                                                <td>6,54</td>
+                                                <td>64,46</td>
+                                                <td>6,45</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>92,31</td>
+                                                <td>6,70</td>
+                                                <td>70,05</td>
+                                                <td>6.48</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="4">GET /links</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>57,30</td>
+                                                <td>28,01</td>
+                                                <td>76,67</td>
+                                                <td>26,50</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>21,64</td>
+                                                <td>29,44</td>
+                                                <td>38,32</td>
+                                                <td>34,71</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>13,5</td>
+                                                <td>4,48</td>
+                                                <td>20,56</td>
+                                                <td>6,53</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>6,61</td>
+                                                <td>6,27</td>
+                                                <td>7,45</td>
+                                                <td>6,78</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="4">GET /{short-link}</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>12,39</td>
+                                                <td>24,7</td>
+                                                <td>19,54</td>
+                                                <td>25,05</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>10,44</td>
+                                                <td>25,49</td>
+                                                <td>11,31</td>
+                                                <td>26,29</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>27,26</td>
+                                                <td>6,77</td>
+                                                <td>54,28</td>
+                                                <td>7,47</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>7,30</td>
+                                                <td>5,89</td>
+                                                <td>8,51</td>
+                                                <td>8,39</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="4">POST /links</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>22,55</td>
+                                                <td>24,88</td>
+                                                <td>39,81</td>
+                                                <td>24,57</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>12,95</td>
+                                                <td>26,71</td>
+                                                <td>12,96</td>
+                                                <td>24,52</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>21,95</td>
+                                                <td>4,04</td>
+                                                <td>35,99</td>
+                                                <td>7,35</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>8,23</td>
+                                                <td>8,60</td>
+                                                <td>7,62</td>
+                                                <td>8,5</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="4">PATCH /links</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>8,57</td>
+                                                <td>24,22</td>
+                                                <td>25,81</td>
+                                                <td>25,75</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>5,86</td>
+                                                <td>24,22</td>
+                                                <td>8,74</td>
+                                                <td>25,47</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>10,03</td>
+                                                <td>6,39</td>
+                                                <td>14,1</td>
+                                                <td>7,56</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>8,89</td>
+                                                <td>6,40</td>
+                                                <td>10,07</td>
+                                                <td>6,91</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="4">GET /links/self</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>27,34</td>
+                                                <td>25,28</td>
+                                                <td>52,57</td>
+                                                <td>25,58</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>11,04</td>
+                                                <td>38,61</td>
+                                                <td>10,59</td>
+                                                <td>34,01</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>13,36</td>
+                                                <td>6,63</td>
+                                                <td>24,03</td>
+                                                <td>6,69</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>7,56</td>
+                                                <td>6,48</td>
+                                                <td>8,24</td>
+                                                <td>8,14</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="4">DELETE /links</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>32,70</td>
+                                                <td>24,76</td>
+                                                <td>23,24</td>
+                                                <td>25,13</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>7,5</td>
+                                                <td>24,70</td>
+                                                <td>13,51</td>
+                                                <td>27,06</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>47,80</td>
+                                                <td>7,19</td>
+                                                <td>21,88</td>
+                                                <td>7,65</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>8,63</td>
+                                                <td>6,83</td>
+                                                <td>8,15</td>
+                                                <td>8,50</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="4">E2E (End to End)</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>83,19</td>
+                                                <td>24,32</td>
+                                                <td>84,17</td>
+                                                <td>21,50</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>81,56</td>
+                                                <td>48,50</td>
+                                                <td>86,45</td>
+                                                <td>44,77</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>61,58</td>
+                                                <td>6,49</td>
+                                                <td>53,34</td>
+                                                <td>6,60</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>65,95</td>
+                                                <td>6,65</td>
+                                                <td>67,18</td>
+                                                <td>6,48</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="4">E2E (End to End) tanpa login</td>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td>36,42</td>
+                                                <td>24,77</td>
+                                                <td>61,23</td>
+                                                <td>23,12</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td>7,83</td>
+                                                <td>25,21</td>
+                                                <td>13,40</td>
+                                                <td>26,29</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td>27,38</td>
+                                                <td>7,44</td>
+                                                <td>29,48</td>
+                                                <td>7,76</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td>7,12</td>
+                                                <td>6,59</td>
+                                                <td>4,80</td>
+                                                <td>6,10</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th rowspan="2">Servis/ Basis Data</th>
+                                                <th colspan="3">Load</th>
+                                                <th colspan="3">Spike</th>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th class="nowrap">CPU</th>
+                                                <th class="nowrap">Memory</th>
+                                                <th class="nowrap">Ips</th>
+                                                <th class="nowrap">CPU</th>
+                                                <th class="nowrap">Memory</th>
+                                                <th class="nowrap">Ips</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td class="nowrap">32.7%</td>
+                                                <td class="nowrap">24.77%</td>
+                                                <td class="nowrap">21</td>
+                                                <td class="nowrap">52.57%</td>
+                                                <td class="nowrap">25.05%</td>
+                                                <td class="nowrap">42</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td class="nowrap">11.04%</td>
+                                                <td class="nowrap">24.70%</td>
+                                                <td class="nowrap">8</td>
+                                                <td class="nowrap">12.96%</td>
+                                                <td class="nowrap">26.29%</td>
+                                                <td class="nowrap">16</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td class="nowrap">21.95%</td>
+                                                <td class="nowrap">6.54%</td>
+                                                <td class="nowrap">32</td>
+                                                <td class="nowrap">24.03%</td>
+                                                <td class="nowrap">7.35%</td>
+                                                <td class="nowrap">64</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td class="nowrap">8.23%</td>
+                                                <td class="nowrap">6.48%</td>
+                                                <td class="nowrap">20</td>
+                                                <td class="nowrap">8.24%</td>
+                                                <td class="nowrap">8.14%</td>
+                                                <td class="nowrap">40</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    
+                                    <ul class="list text-muted text-justify">
+                                        <li>
+                                            <strong>Utilisasi Memori:</strong> Secara umum, penggunaan memori tiap servis tidak terlalu dipengaruhi oleh jumlah iterasi per detik dan jenis basis data. Golang menunjukkan penggunaan memori yang lebih efisien dengan median 7,319%, jauh lebih rendah dibandingkan dengan Node.js yang mencapai 25,04%, atau sekitar 3 kali lebih tinggi.
+                                        </li>
+                                        <li>
+                                            <strong>Rataan Breakpoint dan Utilisasi CPU:</strong> Golang cenderung menghasilkan lebih banyak iterasi per detik dalam pengujian breakpoint. Pada pengujian load dan spike, Golang juga lebih efisien dengan median utilisasi CPU sebesar 17,57%, lebih rendah dibandingkan Node.js yang mencapai 22,09%, menunjukkan bahwa Golang dapat memproses lebih banyak data dengan sumber daya yang lebih sedikit.
+                                        </li>
+                                        <li>
+                                            <strong>Kenaikan Utilisasi CPU:</strong> Golang menunjukkan kenaikan persentase median utilisasi CPU yang lebih rendah, yaitu 30,64%, meskipun secara umum melakukan lebih banyak iterasi per detik. Node.js memiliki kenaikan lebih tinggi, yakni 45,12%.
+                                        </li>
+                                        <li>
+                                            <strong>Kenaikan Utilisasi Memori:</strong> Dalam pengujian load ke spike, Node.js mengalami kenaikan median utilisasi memori sebesar 1,92%, sementara Golang naik sebesar 5,3%. Meskipun demikian, nilai absolut utilisasi memori Node.js masih jauh lebih tinggi, dengan median spike mencapai 25,53% dibandingkan dengan Golang yang hanya 7,7%.
+                                        </li>
+                                        <li>
+                                            <strong>Perbandingan SQL dan NoSQL:</strong> PostgreSQL menunjukkan median utilisasi CPU  yang lebih tinggi dibandingkan MongoDB, dengan nilai pada load sebesar 27,36% dan spike sebesar 37,9%. MongoDB lebih efisien dengan utilisasi CPU pada load sebesar 8,76% dan spike sebesar 10,33%, serta memori load sebesar 7,71% dan spike sebesar 8,5% berbanding pada PostgreSQL 27,36% cpu dan 37,9%.
+                                        </li>
+                                        <li>
+                                            <strong>Efisiensi PostgreSQL dan MongoDB:</strong> Meskipun MongoDB lebih efisien dalam penggunaan CPU dan memori, PostgreSQL menunjukkan performa lebih baik dalam iterasi per detik, dengan median 26,5 dibandingkan 8 pada MongoDB. Pada pengujian E2E, PostgreSQL kurang efisien dibandingkan MongoDB. Namun, PostgreSQL cenderung lebih baik dalam memproses data lebih cepat di semua servis, baik Golang maupun Node.js, karena iterasi per detiknya yang lebih tinggi.
+                                        </li>
+                                    </ul>
+
+
+                                    
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailutilsistemmedian">
+                            Utilisasi Sistem (Median)
+                        </button>
+                        <!-- Modal detail single link  -->
+                        <div class="modal fade text-dark" id="detailutilsistemmedian" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Median Utilisasi Sistem CPU & Memory</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><b>IPS (Iteration per second) </b> Jumlah iterasi yang dilakukan saat pengujian dalam setiap detik, dimana memungkinkan dalam satu iterasi terdapat lebih dari 1 request/permintaan yang dilakukan</p>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th rowspan="2">Servis/ Basis Data</th>
+                                                <th colspan="3">Load</th>
+                                                <th colspan="3">Spike</th>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th class="nowrap">CPU</th>
+                                                <th class="nowrap">Memory</th>
+                                                <th class="nowrap">Ips</th>
+                                                <th class="nowrap">CPU</th>
+                                                <th class="nowrap">Memory</th>
+                                                <th class="nowrap">Ips</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td class="nowrap">32.7%</td>
+                                                <td class="nowrap">24.77%</td>
+                                                <td class="nowrap">21</td>
+                                                <td class="nowrap">52.57%</td>
+                                                <td class="nowrap">25.05%</td>
+                                                <td class="nowrap">42</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td class="nowrap">11.04%</td>
+                                                <td class="nowrap">24.70%</td>
+                                                <td class="nowrap">8</td>
+                                                <td class="nowrap">12.96%</td>
+                                                <td class="nowrap">26.29%</td>
+                                                <td class="nowrap">16</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td class="nowrap">21.95%</td>
+                                                <td class="nowrap">6.54%</td>
+                                                <td class="nowrap">32</td>
+                                                <td class="nowrap">24.03%</td>
+                                                <td class="nowrap">7.35%</td>
+                                                <td class="nowrap">64</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td class="nowrap">8.23%</td>
+                                                <td class="nowrap">6.48%</td>
+                                                <td class="nowrap">20</td>
+                                                <td class="nowrap">8.24%</td>
+                                                <td class="nowrap">8.14%</td>
+                                                <td class="nowrap">40</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="container">
+                                        <canvas id="chartUtilSistemLoad"></canvas>
+                                    </div>
+
+                                    <div class="container">
+                                        <canvas id="chartUtilSistemSpike"></canvas>
+                                    </div>
+
+                                    <p class="text-muted text justify mt-1">
+                                        Hasil pengujian menunjukkan bahwa kombinasi Golang dengan PostgreSQL memberikan kinerja terbaik dalam pengujian beban dan spike, dengan penggunaan CPU dan memori yang lebih rendah, serta jumlah iterasi per detik yang lebih tinggi dibandingkan dengan kombinasi lainnya. Sebaliknya, kombinasi Node.js dengan MongoDB menunjukkan kinerja yang paling rendah dalam kedua skenario, terutama dalam hal jumlah iterasi per detik yang dihasilkan. Hal ini menyoroti efisiensi yang lebih tinggi dari Golang dan PostgreSQL dalam menangani permintaan yang berat dan tiba-tiba.
+                                    </p>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailutilfm">
+                            Utilisasi Framework
+                        </button>
+                        <!-- Modal detail single link  -->
+                        <div class="modal fade text-dark" id="detailutilfm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Median Utilisasi Framework CPU & Memory</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><b>IPS (Iteration per second) </b> Jumlah iterasi yang dilakukan saat pengujian dalam setiap detik, dimana memungkinkan dalam satu iterasi terdapat lebih dari 1 request/permintaan yang dilakukan</p>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th rowspan="2">Servis</th>
+                                                <th colspan="3">Load</th>
+                                                <th colspan="3">Spike</th>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th class="nowrap">CPU</th>
+                                                <th class="nowrap">Memory</th>
+                                                <th class="nowrap">Ips</th>
+                                                <th class="nowrap">CPU</th>
+                                                <th class="nowrap">Memory</th>
+                                                <th class="nowrap">Ips</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Node.js Express</td>
+                                                <td class="nowrap">22.09%</td>
+                                                <td class="nowrap">24.82%</td>
+                                                <td class="nowrap">14</td>
+                                                <td class="nowrap">32.07%</td>
+                                                <td class="nowrap">25.53%</td>
+                                                <td class="nowrap">28</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang Gin</td>
+                                                <td class="nowrap">17.57%</td>
+                                                <td class="nowrap">7.31%</td>
+                                                <td class="nowrap">15</td>
+                                                <td class="nowrap">22.95%</td>
+                                                <td class="nowrap">7.71%</td>
+                                                <td class="nowrap">30</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="container">
+                                        <canvas id="chartUtilFrameworkLoad"></canvas>
+                                    </div>
+
+                                    <div class="container">
+                                        <canvas id="chartUtilFrameworkSpike"></canvas>
+                                    </div>
+
+                                    <p class="text-muted text-justify mt-1">
+                                        Berdasarkan nilai yang didapat pada pengujian, Golang dapat memproses lebih banyak iterasi per detik dengan penggunaan CPU lebih rendah dibanding Node.js (17,57% vs 22,09%). Golang menunjukkan kenaikan persentase kenaikan utilisasi CPU dari load ke spike testing yang lebih rendah (30,64%) dibanding Node.js (45,12%) meskipun memproses lebih banyak iterasi per detik. Walaupun persentase kenaikan memori lebih tinggi pada Golang (5,3% vs 2,83% di Node.js), penggunaan memori Node.js saat spike testing tetap jauh lebih tinggi (25,53% vs 7,7%).
+                                    </p>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailutildb">
+                            Utilisasi Database
+                        </button>
+                        <!-- Modal detail single link  -->
+                        <div class="modal fade text-dark" id="detailutildb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Median Utilisasi Database CPU & Memory</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><b>IPS (Iteration per second) </b> Jumlah iterasi yang dilakukan saat pengujian dalam setiap detik, dimana memungkinkan dalam satu iterasi terdapat lebih dari 1 request/permintaan yang dilakukan</p>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th rowspan="2">Basis Data</th>
+                                                <th colspan="3">Load</th>
+                                                <th colspan="3">Spike</th>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th class="nowrap">CPU</th>
+                                                <th class="nowrap">Memory</th>
+                                                <th class="nowrap">Ips</th>
+                                                <th class="nowrap">CPU</th>
+                                                <th class="nowrap">Memory</th>
+                                                <th class="nowrap">Ips</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Postgresql</td>
+                                                <td class="nowrap">27.35%</td>
+                                                <td class="nowrap">15.83%</td>
+                                                <td class="nowrap">26.5</td>
+                                                <td class="nowrap">37.9%</td>
+                                                <td class="nowrap">14.63%</td>
+                                                <td class="nowrap">53</td>
+                                            </tr>
+                                            <tr>
+                                                <td>MongoDB</td>
+                                                <td class="nowrap">8.76%</td>
+                                                <td class="nowrap">7.71%</td>
+                                                <td class="nowrap">8</td>
+                                                <td class="nowrap">10.33%</td>
+                                                <td class="nowrap">8.5%</td>
+                                                <td class="nowrap">16</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="container">
+                                        <canvas id="chartUtilDBLoad"></canvas>
+                                    </div>
+
+                                    <div class="container">
+                                        <canvas id="chartUtilDBSpike"></canvas>
+                                    </div>
+
+                                    <p class="text-muted text-justify mt-1">
+                                        Berdasarkan hasil, PostgreSQL menggunakan lebih banyak CPU dan memori dibandingkan MongoDB selama load dan spike testing, dengan nilai median CPU 27,36% dan 37,9% serta memori 27,36% dan 37,9%, sementara MongoDB hanya menggunakan 8,76% dan 10,33% untuk CPU, serta 7,71% dan 8,5% untuk memori. Meskipun MongoDB terlihat lebih efisien, PostgreSQL sebenarnya memproses lebih banyak iterasi per detik (median 26,5 vs 8 pada MongoDB) selama load testing.  
+                                    </p>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <h6>Perbandingan Performa Get Single Link</h6>
+                        <p class="text-muted text-justify mt-1">
+                            Pemilihan endpoint Get Single Link dikarenakan merupakan endpoint yang mendapatkan nilai iterasi per detik paling tinggi pada semua skenario sistem.
+                        </p>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailGetSingleLink">
+                            Nilai Hasil Pengujian Endpoint
+                        </button>
+                        <!-- Modal detail single link  -->
+                        <div class="modal fade text-dark" id="detailGetSingleLink" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Hasil Pengujian Get Single Link</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><b>Catatan:</b> Beban pengujian berturut yang diberikan Node.js/PostgreSQL (68), Node.js/MongoDB (47), Golang/PostgreSQL (81), dan Golang/MongoDB (69) merupakan beban pada Load Testing dengan berarti dua kali lipat diberikan pada Spike Testing</p>
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th rowspan="2">Servis/ Basis Data</th>
+                                                <th colspan="3">Load</th>
+                                                <th colspan="3">Spike</th>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th class="nowrap">Median</th>
+                                                <th class="nowrap">P95</th>
+                                                <th class="nowrap">%</th>
+                                                <th class="nowrap">Median</th>
+                                                <th class="nowrap">P95</th>
+                                                <th class="nowrap">%</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td class="nowrap">83ms</td>
+                                                <td class="nowrap">146ms</td>
+                                                <td class="nowrap">100%</td>
+                                                <td class="nowrap">147ms</td>
+                                                <td class="nowrap">1s</td>
+                                                <td class="nowrap">94%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td class="nowrap">81ms</td>
+                                                <td class="nowrap">136ms</td>
+                                                <td class="nowrap">99%</td>
+                                                <td class="nowrap">9s</td>
+                                                <td class="nowrap">16s</td>
+                                                <td class="nowrap">78%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td class="nowrap">193ms</td>
+                                                <td class="nowrap">398ms</td>
+                                                <td class="nowrap">99%</td>
+                                                <td class="nowrap">416ms</td>
+                                                <td class="nowrap">1s</td>
+                                                <td class="nowrap">99%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td class="nowrap">8s</td>
+                                                <td class="nowrap">16s</td>
+                                                <td class="nowrap">77%</td>
+                                                <td class="nowrap">4s</td>
+                                                <td class="nowrap">16s</td>
+                                                <td class="nowrap">40%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="container">
+                                        <canvas id="chartSingleLinkLoad"></canvas>
+                                    </div>
+
+                                    <div class="container">
+                                        <canvas id="chartSingleLinkSpike"></canvas>
+                                    </div>
+
+                                    <br>
+
+                                    <p class="text-muted text-justify mt-1">
+                                        Hasil pengujian menunjukkan bahwa kombinasi Golang dengan PostgreSQL memiliki performa terbaik dibandingkan dengan tiga kombinasi lainnya. Golang dengan PostgreSQL mencatatkan iterasi per detik tertinggi, dengan tingkat keberhasilan permintaan 99% pada pengujian load dan spike. Meskipun terdapat beberapa kegagalan kecil, performa ini tetap lebih baik dibandingkan Node.js yang mencatat 100% keberhasilan pada load testing, namun mengalami 6% kegagalan pada spike testing. Secara keseluruhan, Golang menunjukkan ketahanan maksimal yang lebih tinggi dan kemampuan memproses permintaan lebih banyak per detik (81 vs 68), meskipun waktu pemrosesannya sedikit lebih lama dibandingkan Node.js.
+                                    </p>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 mb-5">
+                        <h6>Perbandingan Performa E2E dengan Login</h6>
+                        <p class="text-muted text-justify mt-1">
+                            Membandingkan hasil E2E dengan login dikarenakan pada pengujian ini semua skenario sistem diberikan beban maksimal yang sama. Sehingga dapat melihat bagaimana perilaku tiap skenario sistem yang diuji ketika beban yang diberikan adalah sama.
+                        </p>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailE2E">
+                            Hasil Pengujian E2E dengan Login (RPS)
+                        </button>
+                        <br>
+                        <!-- Modal detail e2e -->
+                        <div class="modal fade text-dark" id="detailE2E" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Hasil Pengujian E2E dengan login (Permintaan per detik)</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><b>RPS (Request per second) </b> Jumlah permintaan yang dilakukan saat pengujian dalam setiap detik.</p>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th rowspan="2">Servis/ Basis Data</th>
+                                                <th colspan="3">Load</th>
+                                                <th colspan="3">Spike</th>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th class="nowrap">Median</th>
+                                                <th class="nowrap">P95</th>
+                                                <th class="nowrap">%</th>
+                                                <th class="nowrap">Median</th>
+                                                <th class="nowrap">P95</th>
+                                                <th class="nowrap">%</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td class="nowrap">4.72s</td>
+                                                <td class="nowrap">12.86s</td>
+                                                <td class="nowrap">13.96%</td>
+                                                <td class="nowrap">6s</td>
+                                                <td class="nowrap">14.9s</td>
+                                                <td class="nowrap">5.64%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td class="nowrap">10.5s</td>
+                                                <td class="nowrap">40.49s</td>
+                                                <td class="nowrap">6.7%</td>
+                                                <td class="nowrap">21s</td>
+                                                <td class="nowrap">57.8s</td>
+                                                <td class="nowrap">3%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td class="nowrap">229ms</td>
+                                                <td class="nowrap">10s</td>
+                                                <td class="nowrap">9%</td>
+                                                <td class="nowrap">431ms</td>
+                                                <td class="nowrap">14.3s</td>
+                                                <td class="nowrap">4.17%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td class="nowrap">900ms</td>
+                                                <td class="nowrap">10.6s</td>
+                                                <td class="nowrap">9.67%</td>
+                                                <td class="nowrap">1.4s</td>
+                                                <td class="nowrap">15s</td>
+                                                <td class="nowrap">3.77%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="container">
+                                        <canvas id="chartE2ELoad"></canvas>
+                                    </div>
+
+                                    <div class="container">
+                                        <canvas id="chartE2ESpike"></canvas>
+                                    </div>
+                                    <br>
+                                    <p class="text-muted text-justify mt-1">
+                                        Persentase keberhasilan pengujian menunjukkan bahwa Node.js dengan PostgreSQL memiliki hasil terbaik pada load dan spike testing. Namun, Golang memberikan performa yang lebih konsisten pada kedua database, dengan nilai median dan p95 yang umumnya lebih baik daripada Node.js. Nilai median dan p95 ini didasarkan pada durasi pemrosesan permintaan per detik, dengan satu iterasi pengujian terdiri dari 7 permintaan.
+                                    </p>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary mt-1" data-toggle="modal" data-target="#detailE2E2">
+                            Hasil Pengujian E2E dengan Login (IPS)
+                        </button>
+                        <!-- Modal detail e2e -->
+                        <div class="modal fade text-dark" id="detailE2E2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header text-black">
+                                    <h5 class="modal-title text-dark" id="exampleModalLabel">Hasil Pengujian E2E dengan login (Iterasi Per Detik)</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><b>IPS (Iteration per second) </b> Jumlah iterasi yang dilakukan saat pengujian dalam setiap detik, dimana memungkinkan dalam satu iterasi terdapat lebih dari 1 request/permintaan yang dilakukan</p>
+
+                                    <table class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th rowspan="2">Servis/ Basis Data</th>
+                                                <th colspan="2">Load</th>
+                                                <th colspan="2">Spike</th>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <th class="nowrap">Median</th>
+                                                <th class="nowrap">P95</th>
+                                                <th class="nowrap">Median</th>
+                                                <th class="nowrap">P95</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Node.js / PostgreSQL</td>
+                                                <td class="nowrap">6.77s</td>
+                                                <td class="nowrap">28.83s</td>
+                                                <td class="nowrap">638ms</td>
+                                                <td class="nowrap">18s</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Node.js / MongoDB</td>
+                                                <td class="nowrap">7.57s</td>
+                                                <td class="nowrap">72s</td>
+                                                <td class="nowrap">904ms</td>
+                                                <td class="nowrap">68s</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / PostgreSQL</td>
+                                                <td class="nowrap">5.11s</td>
+                                                <td class="nowrap">18.1s</td>
+                                                <td class="nowrap">556ms</td>
+                                                <td class="nowrap">15.24s</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Golang / MongoDB</td>
+                                                <td class="nowrap">6.83s</td>
+                                                <td class="nowrap">20.97s</td>
+                                                <td class="nowrap">1s</td>
+                                                <td class="nowrap">17.7s</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="container">
+                                        <canvas id="chartE2ELoad2"></canvas>
+                                    </div>
+
+                                    <div class="container">
+                                        <canvas id="chartE2ESpike2"></canvas>
+                                    </div>
+                                    <br>
+                                    <p class="text-muted text-justify mt-1">
+                                        Hasil perhitungan pada iterasi menunjukkan peningkatan signifikan, terutama saat load testing. Peningkatan ini terjadi karena ada satu endpoint, yaitu login, yang membutuhkan waktu lebih lama untuk diproses. Secara umum, Golang menunjukkan performa lebih baik dan stabil pada semua basis data yang digunakan dibandingkan dengan Node.js.
+                                    </p>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="py-7 bg-dark section-angle top-left bottom-left" id="hasil">
+    <div class="container">
+        <div class="row mt-1">
+            <div class="col-md-6 mx-auto text-center">
+                <h2 class="heading-black">Hasil Akhir</h2>
+                <p class="text-muted lead">Terdapat beberapa poin kesimpulan dan hasil akhir percobaan perbandingan yang sudah dilakukan dengan total empat bahan uji yang melibatkan kombinasi antara Golang Gin, Node.js Express, Postresql, dan MongoDB dengan alat uji K6</p>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-6 mt-2">
+                <div class="card">
+                    <div class="container text-white">
+                        <canvas id="chartBPSistem2"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mt-2">
+                <div class="card">
+                    <div class="container">
+                        <canvas id="chartUtilSistemLoad2"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mt-2">
+                <div class="card">
+                    <div class="container">
+                        <canvas id="chartBPFW2"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mt-2">
+                <div class="card">
+                    <div class="container">
+                        <canvas id="chartUtilFrameworkLoad2"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mt-2">
+                <div class="card">
+                    <div class="container">
+                        <canvas id="chartBPDB2"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mt-2">
+                <div class="card">
+                    <div class="container">
+                        <canvas id="chartUtilDBLoad2"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-6 mb-5">
+                <h6>Golang lebih baik dari Node.js</h6>
+                <p class="text-dark text-justify">
+                    Golang Gin umumnya lebih unggul dari Node.js Express, dengan hasil breakpoint 15 vs 14, dan penggunaan CPU dan memori yang lebih efisien saat load testing (CPU 17,57%, memori 7,32% dibandingkan dengan Node.js yang membutuhkan CPU 22,09% dan memori 24,8%).
+                </p>
+            </div>
+
+            <div class="col-md-6 mb-5">
+                <h6>Postgresql lebih baik dari MongoDB</h6>
+                <p class="text-dark text-justify">
+                    PostgreSQL lebih baik dari MongoDB, dengan hasil breakpoint 26,5 vs 8, serta penggunaan CPU dan memori yang lebih rendah (CPU 8,76%, memori 7,72% dibandingkan dengan MongoDB yang memerlukan CPU 27,36% dan memori 15,83%).
+                </p>
+            </div>
+
+            <div class="col-md-6 mb-5">
+                <h6>Kombinasi Golang Postgresql hasilkan performa terbaik</h6>
+                <p class="text-dark text-justify">
+                    Kombinasi Golang dan PostgreSQL memberikan performa terbaik dengan median 32 dalam breakpoint testing, yang merupakan nilai tertinggi. Pada pengujian iterasi per detik tertinggi, dalam perbandingan performa yang didapat pada nilai iterasi tertinggi, Golang-PostgreSQL mencapai tingkat keberhasilan 99% dalam load dan spike testing, dengan median waktu pemrosesan 193ms (P95 398ms) untuk load testing dan 416ms (P95 1s) untuk spike testing. Golang memproses 81 iterasi per detik, lebih banyak dibanding Node.js yang mencapai 68 iterasi per detik yang ada pada peringkat dua.
+                </p>
+            </div>
+
+            <div class="col-md-6 mb-5">
+                <h6>Golang Postgresql memberikan performa baik dan stabil pada perbandingan beban yang sama</h6>
+                <p class="text-dark text-justify">
+                    Pada pengujian end-to-end dengan login yang semua skenario sistem diuji pada beban yang sama, Golang-PostgreSQL juga menunjukkan performa paling stabil. Untuk metrik permintaan per detik, Golang-PostgreSQL mencapai median 229ms (P95 10 detik) pada load testing dan 431ms (P95 14,3 detik) pada spike testing. Sedangkan untuk iterasi per detik, median waktu yang dicapai adalah 5,11 detik (P95 18,1 detik) pada load testing dan 556ms (P95 15,24 detik) pada spike testing, menjadikannya hasil terbaik di tiap skenario yang diuji.
+                </p>
+            </div>
+        </div>
+        <div class="row mt-5 justify-content-center">
+            <div class="col-md-7 mb-12 text-center">
+                <h4>Hasil dan Rekomendasi</h4>
+                <p class="text-dark text-justify">
+                    Berdasarkan hasil pengujian API yang membandingkan performa dua framework—Golang Gin dan Node.js Express—serta dua database—PostgreSQL dan MongoDB—dengan studi kasus URL Shortener, disarankan menggunakan kombinasi Golang Gin dan PostgreSQL untuk skenario serupa. Kombinasi ini menunjukkan performa terbaik dengan efisiensi sumber daya yang optimal.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--footer-->
+<footer class="py-6">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 mr-auto">
+                <h5>About Me</h5>
+                <p class="text-dark text-justify">Kelana Chandra Helyandika (22) Informatics student at Jenderal Soedirman University, focused on backend development. Skilled in Node.js and expanding expertise in Golang with frameworks like Gin/Fiber. Experienced in managing MySQL/PostgreSQL and MongoDB/Firebase databases. Versatile in frontend work using CodeIgniter and proficient in SDET/QA testing with tools like Jest, K6, and Playwright.</p>
+                <ul class="list-inline social social-sm">
+                    <li class="list-inline-item">
+                        <a href="https://www.linkedin.com/in/kelanach" target="_blank"><i class="fa fa-linkedin"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://www.medium.com/@kelanach" target="_blank"><i class="fa fa-dribbble"></i></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://www.github.com/momokii" target="_blank"><i class="fa fa-github"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12 text-dark text-center small-xl">
+                &copy; 2024 Kelana Chandra Helyandika - All Rights Reserved
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!--scroll to top-->
+<div class="scroll-top">
+    <i class="fa fa-angle-up" aria-hidden="true"></i>
+</div>
+
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.7.3/feather.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script src="./public/js/scripts.js"></script>
+<!-- Prism.js JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui-bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui-standalone-preset.js"></script>
+<script>
+    // SWAGGER UPLOAD
+    window.onload = function() {
+        // SwaggerUIBundle is the main Swagger UI object
+        window.ui = SwaggerUIBundle({
+            url: "/public/swagger.yaml", // Ganti dengan path ke file YAML Anda
+            dom_id: '#swagger-ui',
+            deepLinking: true,
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            plugins: [
+                SwaggerUIBundle.plugins.DownloadUrl
+            ],
+            layout: "StandaloneLayout"
+        });
+    };
+
+    // CHART
+    function createChart(ctx, labels, datasets, type, title, white = false) {
+        new Chart(ctx, {
+            type: type,  // Ubah tipe chart dari 'line' menjadi 'bar'
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: white ? "white" : "black"
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: white ? "white" : "black"  // Mengubah warna label axis menjadi putih
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: title,
+                        color: white ? "white" : "black"
+                    },
+                    legend: {
+                        labels:{
+                            color: white ? "white" : "black"
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function returnDatasetLoad(data, with_percent = true, util_system = false, bp = false) {
+        const dataReturn = [
+            {
+                label: "median (ms)",
+                data: data[0],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            },
+            {
+                label: "p95 (ms)",
+                data: data[1],
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }
+        ]
+
+        if(bp) {
+            dataReturn[0]['label'] = 'median'
+            dataReturn.pop()
+            return dataReturn
+        }
+
+        if (util_system) {
+            dataReturn[0]['label'] = 'CPU'
+            dataReturn[1]['label'] = 'Memory'
+            return dataReturn
+        }
+
+        if (with_percent) {
+            dataReturn[2] = {
+                label: "%",
+                data: data[2],
+                backgroundColor: 'rgba(78, 192, 192, 1.4)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }
+        }
+
+        return dataReturn
+    }
+
+    const SistemScenarioName = ['Node.js - Postgresql', 'Node.js - MongoDB', 'Golang - Postgresql', 'Golang - MongoDB']
+    const FrameworkName = ['Node.js - Express', 'Golang - Gin']
+    const DatabaseName = ['Postgresql', 'MongoDB']
+
+    const ctxSingleLinkLoad = document.getElementById('chartSingleLinkLoad').getContext('2d')
+    const ctxSingleLinkSpike = document.getElementById('chartSingleLinkSpike').getContext('2d')
+    const ctxBPSistem = document.getElementById('chartBPSistem').getContext('2d')
+    const ctxBPFW = document.getElementById('chartBPFW').getContext('2d')
+    const ctxBPDB = document.getElementById('chartBPDB').getContext('2d')
+    const ctxUtilSistemLoad = document.getElementById('chartUtilSistemLoad').getContext('2d')
+    const ctxUtilSistemSpike = document.getElementById('chartUtilSistemSpike').getContext('2d')
+    const ctxUtilFrameworkLoad = document.getElementById('chartUtilFrameworkLoad').getContext('2d')
+    const ctxUtilFrameworkSpike = document.getElementById('chartUtilFrameworkSpike').getContext('2d')
+    const ctxUtilDBLoad = document.getElementById('chartUtilDBLoad').getContext('2d')
+    const ctxUtilDBSpike = document.getElementById('chartUtilDBSpike').getContext('2d')
+    const ctxE2ELoad = document.getElementById('chartE2ELoad').getContext('2d')
+    const ctxE2ESpike = document.getElementById('chartE2ESpike').getContext('2d')
+    const ctxE2ELoad2 = document.getElementById('chartE2ELoad2').getContext('2d')
+    const ctxE2ESpike2 = document.getElementById('chartE2ESpike2').getContext('2d')
+
+    const ctxBPSistem2 = document.getElementById('chartBPSistem2').getContext('2d')
+    const ctxUtilSistemLoad2 = document.getElementById('chartUtilSistemLoad2').getContext('2d')
+    const ctxBPFW2 = document.getElementById('chartBPFW2').getContext('2d')
+    const ctxUtilFrameworkLoad2 = document.getElementById('chartUtilFrameworkLoad2').getContext('2d')
+    const ctxBPDB2 = document.getElementById('chartBPDB2').getContext('2d')
+    const ctxUtilDBLoad2 = document.getElementById('chartUtilDBLoad2').getContext('2d')
+
+
+
+
+    const dataSingleLinkLoad = [
+        [83, 81, 193, 8000],
+        [146, 136, 398, 16000],
+        [100, 99, 99, 77]
+    ]
+    const dataSingleLinkSpike = [
+        [147, 9000, 416, 4000],
+        [1000, 16000, 1000, 16000],
+        [94, 78, 99, 40]
+    ]
+
+    const dataBPSistem = [
+        [21, 8, 32, 20]
+    ]
+
+    const dataBPFW = [
+        [14, 15]
+    ]
+
+    const dataBPDB = [
+        [26.5, 8]
+    ]
+
+    const dataUtilSistemLoad = [
+        [32.7, 11.04, 21.95, 8.23],
+        [24.77, 24.7, 6.54, 6.48]
+    ]
+    const dataUtilSistemSpike = [
+        [52.57, 12.96, 24.03, 8.24],
+        [25.05, 26.29, 7.35, 8.4]
+    ]
+
+    const dataUtilFrameworkLoad = [
+        [22.09, 7.57],
+        [24.82, 7.31]
+    ]
+    const dataUtilFrameworkSpike = [
+        [32.07, 22.95],
+        [25.53, 7.71]
+    ]
+
+    const dataUtilDBLoad = [
+        [27.35, 8.76],
+        [15.83, 7.71]
+    ]
+    const dataUtilDBSpike = [
+        [37.9, 10.33],
+        [14.63, 8.5]
+    ]
+
+    const dataE2ELoad = [
+        [4720, 10500, 229, 900],
+        [12860, 40490, 10000, 10600],
+        [13.96, 6.7, 9, 9.67]
+    ]
+    const dataE2ESpike = [
+        [6000, 21000, 431, 1400],
+        [14900, 57800, 14300, 15000],
+        [5.64, 3, 4.17, 3.77]
+    ]
+
+    const dataE2ELoad2 = [
+        [6770, 7570, 5110, 6830],
+        [28830, 72000, 18100, 20970]
+    ]
+    const dataE2ESpike2 = [
+        [638, 904, 556, 1000],
+        [18000, 68000, 15240, 17700]
+    ]
+
+    const datasetSingleLinkLoad = returnDatasetLoad(dataSingleLinkLoad, false)
+    const datasetSingleLinkSpike = returnDatasetLoad(dataSingleLinkSpike, false)
+    const datasetBPSistem = returnDatasetLoad(dataBPSistem, false, false, true)
+    const datasetBPFW = returnDatasetLoad(dataBPFW, false, false, true)
+    const datasetBPDB = returnDatasetLoad(dataBPDB, false, false, true)
+    const datasetUtilSistemLoad = returnDatasetLoad(dataUtilSistemLoad, false, true)
+    const datasetUtilSistemSpike = returnDatasetLoad(dataUtilSistemSpike, false, true)
+    const datasetUtilFWLoad = returnDatasetLoad(dataUtilFrameworkLoad, false, true)
+    const datasetUtilFWSpike = returnDatasetLoad(dataUtilFrameworkSpike, false, true)
+    const datasetUtilDBLoad = returnDatasetLoad(dataUtilDBLoad, false, true)
+    const datasetUtilDBSpike = returnDatasetLoad(dataUtilDBSpike, false, true)
+    const datasetE2ELoad = returnDatasetLoad(dataE2ELoad, false)
+    const datasetE2ESpike = returnDatasetLoad(dataE2ESpike, false)
+    const datasetE2ELoad2 = returnDatasetLoad(dataE2ELoad2, false)
+    const datasetE2ESpike2 = returnDatasetLoad(dataE2ESpike2, false)
+
+
+    createChart(ctxSingleLinkLoad, SistemScenarioName, datasetSingleLinkLoad, 'bar', 'Waktu Pemrosesan Load Get Single Link')
+    createChart(ctxSingleLinkSpike, SistemScenarioName, datasetSingleLinkSpike, 'bar', 'Waktu Pemrosesan Spike Get Single Link')
+    createChart(ctxBPSistem, SistemScenarioName, datasetBPSistem, 'bar', 'Median Breakpoint Sistem')
+    createChart(ctxBPFW, FrameworkName, datasetBPFW, 'bar', 'Median Breakpoint Framework')
+    createChart(ctxBPDB, DatabaseName, datasetBPDB, 'bar', 'Median Breakpoint Database')
+    createChart(ctxUtilSistemLoad, SistemScenarioName, datasetUtilSistemLoad, 'bar', 'Median Utilisasi Sistem Load Testing')
+    createChart(ctxUtilSistemSpike, SistemScenarioName, datasetUtilSistemSpike, 'bar', 'Median Utilisasi Sistem Spike Testing')
+    createChart(ctxUtilFrameworkLoad, FrameworkName, datasetUtilFWLoad, 'bar', 'Median Utilisasi Framework Load Testing')
+    createChart(ctxUtilFrameworkSpike, FrameworkName, datasetUtilFWSpike, 'bar', 'Median Utilisasi Framework Spike Testing')
+    createChart(ctxUtilDBLoad, DatabaseName, datasetUtilDBLoad, 'bar', 'Median Utilisasi Database Load Testing')
+    createChart(ctxUtilDBSpike, DatabaseName, datasetUtilDBSpike, 'bar', 'Median Utilisasi Database Spike Testing')
+    createChart(ctxE2ELoad, SistemScenarioName, datasetE2ELoad, 'bar', 'Waktu Pemrosesan (permintaan per detik) Load E2E dengan Login')
+    createChart(ctxE2ESpike, SistemScenarioName, datasetE2ESpike, 'bar', 'Waktu Pemrosesan (permintaan per detik) Spike E2E dengan Login')
+    createChart(ctxE2ELoad2, SistemScenarioName, datasetE2ELoad2, 'bar', 'Waktu Pemrosesan (iterasi per detik) Load E2E dengan Login')
+    createChart(ctxE2ESpike2, SistemScenarioName, datasetE2ESpike2, 'bar', 'Waktu Pemrosesan (iterasi per detik) Spike E2E dengan Login')
+
+    createChart(ctxBPSistem2, SistemScenarioName, datasetBPSistem, 'bar', 'Median Breakpoint Sistem (IPS)')
+    createChart(ctxUtilSistemLoad2, SistemScenarioName, datasetUtilSistemLoad, 'bar', 'Median Utilisasi Sistem Load Testing (%)')
+    createChart(ctxBPFW2, FrameworkName, datasetBPFW, 'bar', 'Median Breakpoint Framework')
+    createChart(ctxUtilFrameworkLoad2, FrameworkName, datasetUtilFWLoad, 'bar', 'Median Utilisasi Framework Load Testing (%)')
+    createChart(ctxBPDB2, DatabaseName, datasetBPDB, 'bar', 'Median Breakpoint Database')
+    createChart(ctxUtilDBLoad2, DatabaseName, datasetUtilDBLoad, 'bar', 'Median Utilisasi Database Load Testing (%)')
+
+
+
+</script>
+</body>
+</html>
